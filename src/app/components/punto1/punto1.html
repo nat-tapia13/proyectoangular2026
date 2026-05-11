@@ -1,0 +1,16 @@
+<div class="container my-5">
+    <h2 class="text-center mb-4">Eventos Destacados</h2>
+  
+    <div class="card mx-auto" style="max-width: 600px;">
+      <img [src]="eventos[indiceActual].img" class="card-img-top" alt="Imagen del evento">
+      <div class="card-body">
+        <h5 class="card-title">{{ eventos[indiceActual].titulo }}</h5>
+        <p class="card-text">{{ eventos[indiceActual].descripcion }}</p>
+        <div class="d-flex justify-content-between">
+          <button class="btn btn-outline-primary" (click)="anterior()">Anterior</button>
+          <button class="btn btn-outline-primary" (click)="siguiente()">Siguiente</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

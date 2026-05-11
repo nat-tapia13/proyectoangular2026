@@ -1,0 +1,166 @@
+@keyframes fadeUp {
+
+    from {
+
+        transform: translateY(30px);
+        opacity: 0;
+
+    }
+
+    to {
+
+        transform: translateY(0);
+        opacity: 1;
+
+    }
+
+}
+
+@keyframes pulse {
+
+    0% {
+
+        transform: scale(1);
+
+    }
+
+    50% {
+
+        transform: scale(1.03);
+
+    }
+
+    100% {
+
+        transform: scale(1);
+
+    }
+
+}
+
+.card {
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+
+    animation:
+        fadeUp 0.6s ease-in-out both;
+
+    border-radius: 1rem;
+
+    overflow: hidden;
+
+}
+
+.card:hover {
+
+    transform: scale(1.02);
+
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, 0.15);
+
+}
+
+.card-img-top {
+
+    height: 220px;
+
+    object-fit: contain;
+
+    background-color: white;
+
+    padding: 10px;
+
+    border-radius:
+        0.5rem 0.5rem 0 0;
+
+}
+
+.btn-outline-success {
+
+    transition: all 0.3s ease;
+
+}
+
+.btn-outline-success:hover {
+
+    background-color: #198754;
+
+    color: white;
+
+    box-shadow:
+        0 0 10px rgba(25, 135, 84, 0.4);
+
+}
+
+.card-title {
+
+    font-weight: bold;
+
+    color: #343a40;
+
+}
+
+.card-text {
+
+    font-size: 0.9rem;
+
+}
+
+.btn-dark {
+
+    animation: pulse 2s infinite;
+
+    box-shadow:
+        0 0 8px rgba(0, 0, 0, 0.2);
+
+    transition: all 0.3s ease;
+
+}
+
+.btn-dark:hover {
+
+    transform: scale(1.05);
+
+    box-shadow:
+        0 0 12px rgba(0, 0, 0, 0.3);
+
+}
+
+.modal-content {
+
+    border-radius: 1rem;
+
+    box-shadow:
+        0 0 20px rgba(0, 0, 0, 0.2);
+
+}
+
+.modal-header,
+.modal-footer {
+
+    background-color: #f8f9fa;
+
+}
+
+.modal-title {
+
+    font-weight: 600;
+
+}
+
+.object-fit-cover {
+
+    object-fit: cover;
+
+    border: 1px solid #dee2e6;
+
+}
+
+.btn-outline-danger,
+.btn-outline-success {
+
+    min-width: 35px;
+
+}

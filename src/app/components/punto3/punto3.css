@@ -1,0 +1,41 @@
+/* El :host asegura que los estilos se apliquen a todo el componente */
+:host {
+  display: block;
+  width: 100%;
+}
+
+/* Estilos para las cartas */
+
+.carta {
+
+    cursor: pointer;
+
+    transition: transform 0.3s ease;
+
+}
+
+.carta:hover {
+
+    transform: scale(1.05);
+
+}
+
+.carta img {
+
+    width: 100%;
+
+    height: 120px;
+
+    object-fit: cover;
+
+    border-radius: 12px;
+
+}
+
+.row {
+
+    max-width: 700px;
+
+    margin: auto;
+
+}
