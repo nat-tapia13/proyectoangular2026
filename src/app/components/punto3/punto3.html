@@ -1,47 +1,73 @@
 <div class="container my-5">
 
-    <h2 class="text-center mb-4">Juego de la MemoriA</h2>
+    <h2 class="text-center mb-4">
+        Juego de la Memoria
+    </h2>
 
-    <!-- MENSAJES -->
-    <div class="text-center mt-4">
-
-        @if (tipoMensaje === 'derrota') {
-        <div class="alert alert-danger">
-            💀 {{ mensajeFinal }}
-        </div>
-        }
-
-        @if (tipoMensaje === 'victoria') {
-        <div class="alert alert-success " style="color:rgb(0, 255, 4),block !important;">
-            🏆 {{ mensajeFinal }}
-        </div>
-        }
-    </div>
-    
     <!-- BOTONES -->
 
     <div class="text-center mb-4">
 
-        <button class="btn btn-success me-2" (click)="iniciarJuego()">INICIAR</button>
+        <button class="btn btn-success me-2" (click)="iniciarJuego()">
 
-        <button class="btn btn-danger" (click)="reiniciarJuego()">REINICIAR</button>
+            INICIAR
+
+        </button>
+
+        <button class="btn btn-warning me-2" (click)="habilitarIntento()" [disabled]="!juegoIniciado || puedeIntentar">
+
+            INTENTAR
+
+        </button>
+
+        <button class="btn btn-danger" (click)="reiniciarJuego()">
+
+            REINICIAR
+
+        </button>
 
     </div>
 
     <!-- INTENTOS -->
-    <h5 class="text-center mb-4">Intentos restantes:{{ intentos }}</h5>
+
+    <h5 class="text-center mb-4">
+
+        Intentos restantes: {{ intentos }}
+
+    </h5>
 
     <!-- TABLERO -->
+
     <div class="row justify-content-center g-3">
 
         <div class="col-3" *ngFor="let carta of cartas">
 
-            <div class="carta" (click)="seleccionarCarta(carta)"><img
-                    [src]="carta.descubierta || carta.encontrada? carta.imagen: imagenTapada"
-                    class="img-fluid rounded shadow"></div>
+            <div class="carta" (click)="seleccionarCarta(carta)">
+
+                <img [src]="
+                        carta.descubierta || carta.encontrada
+                        ? carta.imagen
+                        : imagenTapada
+                    " class="img-fluid rounded shadow">
+
+            </div>
 
         </div>
 
     </div>
 
-    
+    <!-- MENSAJES -->
+
+    <div class="alert alert-success text-center mt-4" *ngIf="juegoTerminado && intentos > 0">
+
+        ¡GANASTE EL JUEGO!
+
+    </div>
+
+    <div class="alert alert-danger text-center mt-4" *ngIf="juegoPerdido()">
+
+        ¡PERDISTE EL JUEGO!
+
+    </div>
+
+</div>

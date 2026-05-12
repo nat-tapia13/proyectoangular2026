@@ -15,7 +15,7 @@ export class Punto1 {
     {titulo: 'Taller de React', descripcion: 'Explora las novedades de la biblioteca de UI más popular y su ecosistema actual en el taller de React 18', img: 'assets/TallerReact.png'},
     {titulo: 'Torneo de Desarrollo de Juegos', descripcion: 'Demuestra tus habilidades creando un videojuego en 48 horas utilizando Python', img: 'assets/TorneoJuego.png'},
     {titulo: 'Conferencia de IA', descripcion: 'Charlas sobre inteligencia artificial y machine learning destacan avances en modelos de lenguaje y aplicaciones prácticas', img: 'assets/ConferenciaIA.png'},
-    
+
   ];
   
   indiceActual = 0;

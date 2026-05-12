@@ -11,16 +11,18 @@ import { Cartas } from '../../models/cartas';
 export class Punto3 {
 
   cartas: Cartas[] = [];
+
   cartasSeleccionadas: Cartas[] = [];
 
   intentos: number = 10;
-  juegoIniciado: boolean = false;
-  juegoTerminado: boolean = false;
-  imagenTapada: string = 'assets/Signo.png';
-  mensajeFinal: string = '';
-  tipoMensaje: 'victoria' | 'derrota' | '' = '';
-  bloqueado: boolean = false;
 
+  juegoIniciado: boolean = false;
+
+  juegoTerminado: boolean = false;
+
+  puedeIntentar: boolean = false;
+
+  imagenTapada: string = 'assets/Signo.png';
 
   imagenes: string[] = [
 
@@ -33,7 +35,6 @@ export class Punto3 {
 
   ];
 
-
   constructor() {
 
     this.generarTablero();
@@ -43,23 +44,26 @@ export class Punto3 {
   iniciarJuego() {
 
     this.juegoTerminado = false;
+
     this.juegoIniciado = true;
+
+    this.puedeIntentar = false;
+
     this.intentos = 10;
+
     this.cartasSeleccionadas = [];
-    this.cartas = [];
-    let cartasDuplicadas = [
 
-      ...this.imagenes,
-      ...this.imagenes
+    this.generarTablero();
 
-    ];
+  }
 
-    cartasDuplicadas.sort(() => Math.random() - 0.5);
+  habilitarIntento() {
 
-    this.cartas = cartasDuplicadas.map((img, index) => ({
-      id: index, imagen: img, descubierta: false, encontrada: false
+    if (!this.juegoTerminado) {
 
-    }));
+      this.puedeIntentar = true;
+
+    }
 
   }
 
@@ -68,6 +72,8 @@ export class Punto3 {
     if (this.juegoTerminado) return;
 
     if (!this.juegoIniciado) return;
+
+    if (!this.puedeIntentar) return;
 
     if (carta.descubierta || carta.encontrada) return;
 
@@ -90,74 +96,90 @@ export class Punto3 {
   }
 
   verificarCartas() {
+
     const [carta1, carta2] = this.cartasSeleccionadas;
 
     if (carta1.imagen === carta2.imagen) {
-      // --- CASO: ACIERTO ---
+
       carta1.encontrada = true;
+
       carta2.encontrada = true;
 
-      // Llamamos a tu método de ganar para que verifique el tablero
-      this.juegoGanado();
+      if (this.cartas.every(c => c.encontrada)) {
+
+        this.juegoTerminado = true;
+
+      }
 
     } else {
-      // --- CASO: ERROR ---
+
       carta1.descubierta = false;
+
       carta2.descubierta = false;
 
-      this.intentos--; // Restamos el intento
+      this.intentos--;
 
-      // LLAMAMOS AQUÍ a tu método de perder
-      this.juegoPerdido();
+    }
+
+    if (this.intentos <= 0) {
+
+      this.juegoTerminado = true;
+
     }
 
     this.cartasSeleccionadas = [];
+
+    this.puedeIntentar = false;
+
   }
-  juegoGanado(): void {
-  if (this.cartas.length > 0 && this.cartas.every(c => c.encontrada)) {
-    this.mensajeFinal = "¡FELICIDADES! Has descubierto todo las cartas.";
-    this.tipoMensaje = 'victoria';
-    this.juegoTerminado = true;
-    this.bloqueado = true;
-    this.juegoIniciado = true; // Asegúrate de que esto siga en true para que el HTML no se oculte
-    console.log("Estado actual:", this.tipoMensaje); // Debe decir 'victoria'
+
+  juegoGanado(): boolean {
+
+    return this.cartas.length > 0 &&
+      this.cartas.every(c => c.encontrada);
+
   }
-}
+
+  juegoPerdido(): boolean {
+
+    return this.intentos <= 0;
+
+  }
+
   reiniciarJuego() {
 
     this.juegoIniciado = false;
+
     this.juegoTerminado = false;
-    this.bloqueado = false;
+
+    this.puedeIntentar = false;
+
     this.intentos = 10;
+
     this.cartasSeleccionadas = [];
-    this.cartas = [];
-    this.tipoMensaje = '';      // <--- LIMPIAR EL MENSAJE
-    this.mensajeFinal = '';
+
     this.generarTablero();
 
   }
 
-  juegoPerdido(): void {
-  if (this.intentos <= 0) { 
-    this.mensajeFinal = "SE ACABARON LOS INTENTOS ¡Vuelve a intentarlo nuevamente!";
-    this.tipoMensaje = 'derrota';
-    this.juegoTerminado = true; // <--- IMPORTANTE
-    this.bloqueado = true;
-    //console.log("Estado actual:", this.tipoMensaje); // Debe decir 'derrota'
-  }
-}
-
   generarTablero() {
 
-    let cartasDuplicadas = this.imagenes.concat(this.imagenes);
+    let cartasDuplicadas =
+      this.imagenes.concat(this.imagenes);
 
     cartasDuplicadas.sort(() => Math.random() - 0.5);
 
     this.cartas = cartasDuplicadas.map((img, index) => ({
-      id: index, imagen: img, descubierta: false, encontrada: false
+
+      id: index,
+
+      imagen: img,
+
+      descubierta: false,
+
+      encontrada: false
 
     }));
 
   }
-
 }

@@ -1,111 +1,435 @@
-<div class="container my-4">
-  <h2 class="text-center mb-4">Inscripción a Cursos</h2>
+<div class="container my-5">
 
-  <!-- Botón para mostrar/ocultar formulario -->
-  <div class="text-end mb-3">
-    <button class="btn btn-primary" (click)="toggleFormulario()">
-      {{ mostrarFormulario ? 'Cerrar Formulario' : 'Nueva Inscripción' }}
-    </button>
+  <!-- TITULO -->
+
+  <div class="text-center mb-4">
+
+    <h2 class="fw-bold">
+      Inscripción a Cursos
+    </h2>
+
+    <p class="text-muted">
+      Plataforma educativa para registro de alumnos
+    </p>
+
   </div>
 
-  <!-- Formulario -->
-  <form *ngIf="mostrarFormulario" class="border p-4 rounded bg-light shadow-sm">
-    <div class="mb-3">
-      <label class="form-label">DNI</label>
-      <input type="text" [(ngModel)]="inscripcion.dni" name="dni" class="form-control">
+  <!-- BOTON FORMULARIO -->
+
+  <div class="text-end mb-4">
+
+    <button class="btn btn-primary shadow-sm" (click)="toggleFormulario()">
+
+      <i class="bi bi-pencil-square"></i>
+
+      {{ mostrarFormulario
+      ? 'Cerrar Formulario'
+      : 'Nueva Inscripción' }}
+
+    </button>
+
+  </div>
+
+  <!-- FORMULARIO -->
+
+  <form *ngIf="mostrarFormulario" #formInscripcion="ngForm" class="border rounded-4 p-4 bg-light shadow">
+
+    <div class="row">
+
+      <!-- DNI -->
+
+      <div class="col-md-6 mb-3">
+
+        <label for="dni" class="form-label fw-semibold">
+
+          DNI
+
+        </label>
+
+        <input id="dni" name="dni" type="number" class="form-control" placeholder="Ingrese DNI" maxlength="8"
+          minlength="8" required pattern="[0-9]{8}" [(ngModel)]="inscripcion.dni" #dni="ngModel">
+
+        <div *ngIf="dni.invalid && dni.touched" class="text-danger small mt-1">
+
+          El DNI debe contener 8 números
+
+        </div>
+
+      </div>
+
+      <!-- EMAIL -->
+
+      <div class="col-md-6 mb-3">
+
+        <label for="email" class="form-label fw-semibold">
+
+          Email
+
+        </label>
+
+        <input id="email" name="email" type="email" class="form-control" placeholder="Ingrese Email" required email
+          [(ngModel)]="inscripcion.email" #email="ngModel">
+
+        <div *ngIf="email.invalid && email.touched" class="text-danger small mt-1">
+
+          Ingrese un email válido
+
+        </div>
+
+      </div>
+
+      <!-- CURSO -->
+
+      <div class="col-md-6 mb-3">
+
+        <label for="curso" class="form-label fw-semibold">
+
+          Curso
+
+        </label>
+
+        <select id="curso" name="curso" class="form-select" required [(ngModel)]="inscripcion.curso" #curso="ngModel">
+
+          <option value="">
+            Seleccione un curso
+          </option>
+
+          <option value="Angular">
+            Angular
+          </option>
+
+          <option value="React">
+            React
+          </option>
+
+          <option value="Python">
+            Python
+          </option>
+
+          <option value="Java">
+            Java
+          </option>
+
+          <option value="Docker">
+            Docker
+          </option>
+
+          <option value="GitHub">
+            GitHub
+          </option>
+
+        </select>
+
+        <div *ngIf="curso.invalid && curso.touched" class="text-danger small mt-1">
+
+          Seleccione un curso
+
+        </div>
+
+      </div>
+
+      <!-- PRECIO -->
+
+      <div class="col-md-6 mb-3">
+
+        <label for="precio" class="form-label fw-semibold">
+
+          Precio
+
+        </label>
+
+        <input id="precio" name="precio" type="number" class="form-control" placeholder="Ingrese Precio" required
+          min="1" [(ngModel)]="inscripcion.precio" (input)="calcularTotal()" #precio="ngModel">
+
+        <div *ngIf="precio.invalid && precio.touched" class="text-danger small mt-1">
+
+          El precio debe ser mayor a 0
+
+        </div>
+
+      </div>
+
+      <!-- CATEGORIA -->
+
+      <div class="col-md-6 mb-3">
+
+        <label for="categoriaAlumno" class="form-label fw-semibold">
+
+          Categoría Alumno
+
+        </label>
+
+        <select id="categoriaAlumno" name="categoriaAlumno" class="form-select" required
+          [(ngModel)]="inscripcion.categoriaAlumno" (change)="calcularTotal()" #categoria="ngModel">
+
+          <option [ngValue]="1">
+            Estudiante
+          </option>
+
+          <option [ngValue]="2">
+            Egresado
+          </option>
+
+          <option [ngValue]="3">
+            Particular
+          </option>
+          <option [ngValue]="0">
+            Seleccione Categoría
+          </option>
+
+        </select>
+
+        <div *ngIf="categoria.invalid && categoria.touched" class="text-danger small mt-1">
+
+          Seleccione una categoría
+
+        </div>
+
+      </div>
+
+      <!-- FECHA -->
+
+      <div class="col-md-6 mb-3">
+
+        <label for="fecha" class="form-label fw-semibold">
+
+          Fecha de Inscripción
+
+        </label>
+
+        <input id="fecha" name="fecha" type="date" class="form-control" required
+          [(ngModel)]="inscripcion.fechaInscripcion" #fecha="ngModel">
+
+      </div>
+
     </div>
 
-    <div class="mb-3">
-      <label class="form-label">Email</label>
-      <input type="email" [(ngModel)]="inscripcion.email" name="email" class="form-control">
+    <!-- TOTAL -->
+
+    <div *ngIf="
+        inscripcion.precio > 0 &&
+        inscripcion.categoriaAlumno > 0
+      " class="alert alert-info mt-3">
+
+      <strong>
+        Total a pagar:
+      </strong>
+
+      {{ precioFinal
+      | currency:'ARS':'symbol':'1.2-2' }}
+
     </div>
 
-    <div class="mb-3">
-      <label class="form-label">Curso</label>
-      <input type="text" [(ngModel)]="inscripcion.curso" name="curso" class="form-control">
+    <!-- MENSAJE ERROR 
+
+    <div *ngIf="mensajeError" class="alert alert-danger mt-3">
+
+      {{ mensajeError }}
+
+    </div>-->
+
+    <!-- BOTON -->
+
+    <div class="text-end mt-4">
+
+      <button type="button" class="btn btn-success px-4" [disabled]="formInscripcion.invalid" (click)="registrar()">
+
+        <i class="bi bi-check-circle"></i>
+
+        REGISTRAR
+
+      </button>
+
     </div>
 
-    <div class="mb-3">
-      <label class="form-label">Precio</label>
-      <input type="number" [(ngModel)]="inscripcion.precio" name="precio" class="form-control"
-        (change)="calcularTotal()">
-    </div>
-
-    <div class="mb-3">
-      <label class="form-label">Categoría Alumno</label>
-      <select [(ngModel)]="inscripcion.categoriaAlumno" name="categoriaAlumno" class="form-select"
-        (change)="calcularTotal()">
-        <option value="0">Seleccione...</option>
-        <option value="1">Estudiante</option>
-        <option value="2">Egresado</option>
-        <option value="3">Particular</option>
-      </select>
-    </div>
-
-    <!-- ngIf para mostrar precio final -->
-    <div *ngIf="precioFinal > 0" class="alert alert-info">
-      Precio final: {{ precioFinal | currency:'ARS':'symbol':'1.2-2' }}
-    </div>
-
-    <div class="text-end">
-      <button type="button" class="btn btn-success" (click)="registrar()">REGISTRAR</button>
-    </div>
   </form>
 
-  <!-- Tabla de inscripciones -->
-  <h3 class="mt-5">Inscripciones realizadas</h3>
-  <table class="table table-striped table-hover shadow-sm">
-    <thead class="table-dark">
-      <tr>
-        <th>DNI</th>
-        <th>Email</th>
-        <th>Curso</th>
-        <th>Fecha</th>
-        <th>Precio</th>
-        <th>Total</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let i of listaInscripciones; let idx = index">
-        <td>{{ i.dni }}</td>
-        <td>{{ i.email }}</td>
-        <td>{{ i.curso }}</td>
-        <td>{{ i.fechaInscripcion | date:'dd/MM/yyyy' }}</td>
-        <td>{{ i.precio | currency:'ARS':'symbol':'1.2-2' }}</td>
-        <td>{{ i.total | currency:'ARS':'symbol':'1.2-2' }}</td>
-      </tr>
-    </tbody>
-  </table>
+  <!-- TABLA -->
 
-  <!-- Resumen -->
-  <div class="mt-4 p-3 bg-light border rounded shadow-sm">
-    <h4>Resumen de Inscripciones</h4>
-    <div class="row text-center">
-      <div class="col-md-3">
-        <div class="p-2 border bg-white rounded">
-          <small class="text-muted d-block">Estudiantes</small>
-          <span class="h4">{{ cantidadEstudiantes() }}</span>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="p-2 border bg-white rounded">
-          <small class="text-muted d-block">Egresados</small>
-          <span class="h4">{{ cantidadEgresados() }}</span>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="p-2 border bg-white rounded">
-          <small class="text-muted d-block">Particulares</small>
-          <span class="h4">{{ cantidadParticulares() }}</span>
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="p-2 border bg-primary text-white rounded">
-          <small class="d-block">Total General</small>
-          <span class="h4">{{ totalGeneral() | currency:'ARS':'symbol':'1.2-2' }}</span>
-        </div>
-      </div>
+  <div class="mt-5">
+
+    <h3 class="mb-3 fw-bold">
+      Inscripciones Realizadas
+    </h3>
+
+    <div class="table-responsive">
+
+      <table class="table table-hover table-striped align-middle shadow-sm">
+
+        <thead class="table-dark">
+
+          <tr>
+
+            <th>DNI</th>
+            <th>Email</th>
+            <th>Curso</th>
+            <th>Categoría</th>
+            <th>Fecha</th>
+            <th>Precio</th>
+            <th>Total</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          <tr *ngFor="let item of listaInscripciones">
+
+            <td>{{ item.dni }}</td>
+
+            <td>{{ item.email }}</td>
+
+            <td>{{ item.curso }}</td>
+
+            <td>
+
+              <span *ngIf="item.categoriaAlumno == 1" class="badge bg-primary">
+
+                Estudiante
+
+              </span>
+
+              <span *ngIf="item.categoriaAlumno == 2" class="badge bg-success">
+
+                Egresado
+
+              </span>
+
+              <span *ngIf="item.categoriaAlumno == 3" class="badge bg-warning text-dark">
+
+                Particular
+
+              </span>
+
+            </td>
+
+            <td>
+
+              {{ item.fechaInscripcion
+              | date:'dd/MM/yyyy' }}
+
+            </td>
+
+            <td>
+
+              {{ item.precio
+              | currency:'ARS':'symbol':'1.2-2' }}
+
+            </td>
+
+            <td class="fw-bold text-success">
+
+              {{ item.total
+              | currency:'ARS':'symbol':'1.2-2' }}
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
     </div>
+
+  </div>
+
+  <!-- RESUMEN -->
+
+  <div class="mt-5">
+
+    <div class="card border-0 shadow rounded-4">
+
+      <div class="card-body">
+
+        <h4 class="mb-4 fw-bold">
+
+          Resumen General
+
+        </h4>
+
+        <div class="row text-center">
+
+          <div class="col-md-3 mb-3">
+
+            <div class="p-3 border rounded bg-light h-100">
+
+              <h6 class="text-muted">
+                Estudiantes
+              </h6>
+
+              <h2 class="fw-bold text-primary">
+
+                {{ cantidadEstudiantes() }}
+
+              </h2>
+
+            </div>
+
+          </div>
+
+          <div class="col-md-3 mb-3">
+
+            <div class="p-3 border rounded bg-light h-100">
+
+              <h6 class="text-muted">
+                Egresados
+              </h6>
+
+              <h2 class="fw-bold text-success">
+
+                {{ cantidadEgresados() }}
+
+              </h2>
+
+            </div>
+
+          </div>
+
+          <div class="col-md-3 mb-3">
+
+            <div class="p-3 border rounded bg-light h-100">
+
+              <h6 class="text-muted">
+                Particulares
+              </h6>
+
+              <h2 class="fw-bold text-warning">
+
+                {{ cantidadParticulares() }}
+
+              </h2>
+
+            </div>
+
+          </div>
+
+          <div class="col-md-3 mb-3">
+
+            <div class="p-3 rounded bg-primary text-white h-100">
+
+              <h6>
+                Total General
+              </h6>
+
+              <h4 class="fw-bold">
+
+                {{ totalGeneral()
+                | currency:'ARS':'symbol':'1.2-2' }}
+
+              </h4>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
   </div>
 
 </div>
